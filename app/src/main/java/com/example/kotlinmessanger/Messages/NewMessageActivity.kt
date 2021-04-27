@@ -1,10 +1,13 @@
-package com.example.kotlinmessanger
+package com.example.kotlinmessanger.Messages
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.content.Intent
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kotlinmessanger.Entity.User
+import com.example.kotlinmessanger.R
+import com.example.kotlinmessanger.Items.UserItem
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -13,7 +16,6 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
-import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieAdapter
 
 class NewMessageActivity : AppCompatActivity() {
@@ -25,13 +27,11 @@ class NewMessageActivity : AppCompatActivity() {
         setContentView(R.layout.activity_new_message)
         database=Firebase.database
         supportActionBar?.title="Select User"
-        val Recycler:RecyclerView=findViewById(R.id.RecyclerView_NewMessage)
-
-        val adapter = GroupieAdapter()
-
-        Recycler.adapter =adapter
-
         fetchUsers()
+    }
+
+    companion object{
+        val USER_KEY="USER_KEY"
     }
    private fun fetchUsers(){
        val ref =database.getReference("/users")
@@ -44,6 +44,17 @@ class NewMessageActivity : AppCompatActivity() {
                    if(user!=null)
                    adapter.add(UserItem(user))
                }
+               adapter.setOnItemClickListener { item, view ->
+
+                   val intent = Intent(view.context, ChatLogActivity::class.java)
+
+                   val userItem=item as UserItem
+
+                   intent.putExtra(USER_KEY,userItem.user)
+                   startActivity(intent)
+                   finish()
+               }
+
                val Recycler:RecyclerView=findViewById(R.id.RecyclerView_NewMessage)
                Recycler.adapter =adapter
            }

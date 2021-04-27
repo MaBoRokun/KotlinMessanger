@@ -17,23 +17,27 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.login_activity)
 
         val Email: EditText =findViewById(R.id.Email_login_activity)
-        val Password: EditText =findViewById(R.id.Email_login_activity)
+        val Password: EditText =findViewById(R.id.Password_login_activity)
         val Login: Button =findViewById(R.id.Button_login_activity)
 
         auth = Firebase.auth
-        val email = Email.text.toString()
-        val password = Password.text.toString()
+
+
         Login.setOnClickListener{
-            auth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        // Sign in success, update UI with the signed-in user's information
-                        Log.d("Main", "signInWithEmail:success")
+            val email = Email.text.toString()
+            val password = Password.text.toString()
+
+            auth.signInWithEmailAndPassword(email,password)
+                    .addOnCompleteListener(this) { task ->
+                        if (task.isSuccessful) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d("Main", "signInWithEmail:success")
+                            val user = auth.currentUser
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w("Main", "signInWithEmail:failure", task.exception)
+                        }
                     }
-                }
-                .addOnFailureListener {
-                    Log.d("Main", "signInWithEmail:failed")
-                }
         }
     }
 

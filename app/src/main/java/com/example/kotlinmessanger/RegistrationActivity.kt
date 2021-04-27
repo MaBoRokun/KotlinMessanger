@@ -2,17 +2,16 @@ package com.example.kotlinmessanger
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
-import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.kotlinmessanger.Entity.User
+import com.example.kotlinmessanger.Messages.LatesMessagesActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
@@ -129,16 +128,20 @@ class RegistrationActivity : AppCompatActivity() {
     }
     private fun saveUserToFirebaseDataBase(profileImageUrl:String){
         val Username:EditText=findViewById(R.id.Username_registration_activity)
+        val Email:EditText=findViewById(R.id.Email_registration_activity)
+        val Password: EditText = findViewById(R.id.Password_registration_activity)
         val uid = auth.uid ?: ""
+        val email=Email.text.toString()
+        val password=Password.text.toString()
         val ref = database.getReference("/users/$uid")
         val username:String=Username.text.toString()
 
-        val user = User(uid,username,profileImageUrl)
+        val user = User(uid,email,username,profileImageUrl)
 
         ref.setValue(user)
                 .addOnSuccessListener {
                     Log.d("Main","Data saved to Firebase")
-                    val intent =Intent(this,LatesMessagesActivity::class.java)
+                    val intent =Intent(this, LatesMessagesActivity::class.java)
                     startActivity(intent)
                 }
     }
