@@ -14,17 +14,18 @@
         android:background="@drawable/rounded_edittext_register_login"
         android:maxWidth="240dp"
         android:padding="16dp"
-        android:text="321"
         app:layout_constraintEnd_toStartOf="@+id/Image_chat_to"
         app:layout_constraintTop_toTopOf="@+id/Image_chat_to" />
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/Image_chat_to"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
+        app:civ_border_width="2dp"
+        app:civ_border_color="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/avatars" />

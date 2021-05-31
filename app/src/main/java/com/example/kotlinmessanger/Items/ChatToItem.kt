@@ -5,16 +5,18 @@ import com.example.kotlinmessanger.R
 import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
+import kotlinx.android.synthetic.main.chat_from_row.view.*
+import kotlinx.android.synthetic.main.chat_to_row.view.*
 import kotlinx.android.synthetic.main.user_row_new_message.view.*
 
-class ChatToItem:Item<GroupieViewHolder>() {
+class ChatToItem(val text:String):Item<GroupieViewHolder>() {
     override fun getLayout():Int{
         return R.layout.chat_to_row
     }
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
-//        viewHolder.itemView.username_new_message.text = user.username
-//        Picasso.get().load(user.profileImageUrl)
-//            .rotate(90f)
-//            .into(viewHolder.itemView.profile_image_new_message)
+        viewHolder.itemView.Text_chat_to.text=text
+//        val uri = user.profileImageUrl
+//        val target = viewHolder.itemView.Image_chat_to
+//        Picasso.get().load(uri).into(target)
     }
 }

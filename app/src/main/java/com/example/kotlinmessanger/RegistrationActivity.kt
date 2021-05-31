@@ -44,6 +44,7 @@ class RegistrationActivity : AppCompatActivity() {
 
 
         auth = Firebase.auth
+
         storage=Firebase.storage("gs://kotlinmessanger-271eb.appspot.com/")
         database=Firebase.database("https://kotlinmessanger-271eb-default-rtdb.europe-west1.firebasedatabase.app/")
         Registation.setOnClickListener {

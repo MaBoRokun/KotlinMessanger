@@ -12,14 +12,14 @@
         android:id="@+id/Text_chat_from"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="123"
+
         android:background="@drawable/rounded_edittext_register_login"
         android:padding="16dp"
         android:maxWidth="240dp"
         app:layout_constraintStart_toEndOf="@+id/Image_chat_from"
         app:layout_constraintTop_toTopOf="@+id/Image_chat_from" />
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/Image_chat_from"
         android:layout_width="50dp"
         android:layout_height="50dp"
