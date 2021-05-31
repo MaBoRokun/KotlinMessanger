@@ -70,7 +70,7 @@ class ChatLogActivity : AppCompatActivity() {
         }
     }
     private fun listenForMessages(){
-        val fromId = auth.uid;
+        val fromId = auth.uid
         val toId = toUser?.uid
         val ref = database.getReference("/user-messages/$fromId/$toId")
 
@@ -84,10 +84,8 @@ class ChatLogActivity : AppCompatActivity() {
 
                 if(chatMessages!=null){
                     if(chatMessages.fromId==auth.uid){
-                      //  val currentUser = LatesMessagesActivity.currentUser ?:return
                         adapter.add(ChatFromItem(chatMessages.text))
                     }else{
-                      //  val toUser = intent.getParcelableExtra<User>(NewMessageActivity.USER_KEY)
                         adapter.add(ChatToItem(chatMessages.text))
                     }
                 }
@@ -106,15 +104,5 @@ class ChatLogActivity : AppCompatActivity() {
 
             }
         })
-    }
-    private fun BaseData(){
-        val adapter= GroupieAdapter()
-
-        val recycle_chatlog:RecyclerView=findViewById(R.id.RecyclerView_ChatLog)
-
-
-
-        recycle_chatlog.adapter=adapter
-
     }
 }
