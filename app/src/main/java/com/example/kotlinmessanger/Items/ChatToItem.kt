@@ -15,8 +15,5 @@ class ChatToItem(val text:String):Item<GroupieViewHolder>() {
     }
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         viewHolder.itemView.Text_chat_to.text=text
-//        val uri = user.profileImageUrl
-//        val target = viewHolder.itemView.Image_chat_to
-//        Picasso.get().load(uri).into(target)
     }
 }

@@ -102,8 +102,6 @@ class RegistrationActivity : AppCompatActivity() {
             val CircleImgVew :CircleImageView=findViewById(R.id.circle_image_registration_activity)
             CircleImgVew.setImageBitmap(bitmap)
             SelectPhoto.alpha=0f
-//            val bitmapDrawable = BitmapDrawable(bitmap)
-//            SelectPhoto.setBackgroundDrawable(bitmapDrawable)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 SelectPhoto.foreground=null
             }

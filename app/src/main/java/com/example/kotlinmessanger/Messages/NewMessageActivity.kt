@@ -36,7 +36,7 @@ class NewMessageActivity : AppCompatActivity() {
         val USER_KEY="USER_KEY"
     }
    private fun fetchUsers(){
-       var CurrentUser = auth.currentUser
+       val CurrentUser = auth.currentUser
        val ref =database.getReference("/users")
        ref.addListenerForSingleValueEvent(object: ValueEventListener{
            override fun onDataChange(snapshot: DataSnapshot) {
@@ -45,7 +45,7 @@ class NewMessageActivity : AppCompatActivity() {
                    Log.d("Main",it.toString())
                    val user = it.getValue(User::class.java)
                    if(user!=null) {
-                       if (user.uid != CurrentUser.uid){
+                       if (user.uid != CurrentUser?.uid){
                            adapter.add(UserItem(user))
                        }
                    }
