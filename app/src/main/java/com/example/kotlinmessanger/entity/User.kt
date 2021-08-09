@@ -1,4 +1,4 @@
-package com.example.kotlinmessanger.Entity
+package com.example.kotlinmessanger.entity
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize

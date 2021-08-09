@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Messages.LatesMessagesActivity">
+    tools:context=".activitys.messages.LatesMessagesActivity">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/RecyclerView_Lates_Message"

@@ -1,4 +1,4 @@
-package com.example.kotlinmessanger
+package com.example.kotlinmessanger.activitys
 
 import android.app.Activity
 import android.content.Intent
@@ -10,8 +10,9 @@ import android.util.Log
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import com.example.kotlinmessanger.Entity.User
-import com.example.kotlinmessanger.Messages.LatesMessagesActivity
+import com.example.kotlinmessanger.entity.User
+import com.example.kotlinmessanger.activitys.messages.LatesMessagesActivity
+import com.example.kotlinmessanger.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
@@ -20,6 +21,9 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
 import de.hdodenhof.circleimageview.CircleImageView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.launch
 import java.util.*
 
 
@@ -42,11 +46,10 @@ class RegistrationActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-
         auth = Firebase.auth
-
         storage=Firebase.storage("gs://kotlinmessanger-271eb.appspot.com/")
         database=Firebase.database("https://kotlinmessanger-271eb-default-rtdb.europe-west1.firebasedatabase.app/")
+
         Registation.setOnClickListener {
             val email = Email.text.toString()
             val password = Password.toString()
@@ -57,22 +60,25 @@ class RegistrationActivity : AppCompatActivity() {
                 ).show()
                 return@setOnClickListener
             }
-            auth.createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(this) { task ->
-                        if (task.isSuccessful) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d("Main", "createUserWithEmail:success ${task.result?.user?.uid}")
+            CoroutineScope(IO).launch {
+                auth.createUserWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(this@RegistrationActivity) { task ->
+                            if (task.isSuccessful) {
+                                // Sign in success, update UI with the signed-in user's information
+                                Log.d("Main", "createUserWithEmail:success ${task.result?.user?.uid}")
 
-                            uploadImageToFirebase()
+                                uploadImageToFirebase()
+                            }
                         }
-                    }
-                    .addOnFailureListener {
-                        Log.w("Main", "createUserWithEmail:failure ${it.message}")
-                        Toast.makeText(
-                                baseContext, "Authentication failed.",
-                                Toast.LENGTH_SHORT
-                        ).show()
-                    }
+                        .addOnFailureListener {
+                            Log.w("Main", "createUserWithEmail:failure ${it.message}")
+                            Toast.makeText(
+                                    baseContext, "Authentication failed.",
+                                    Toast.LENGTH_SHORT
+                            ).show()
+                        }
+            }
+
         }
         SelectPhoto.setOnClickListener {
             val intent=Intent(Intent.ACTION_PICK)
@@ -113,7 +119,8 @@ class RegistrationActivity : AppCompatActivity() {
         if(selectedPhotoUri==null) return
         val filename= UUID.randomUUID().toString()
         val ref = storage.getReference("/images/$filename")
-        ref.putFile(selectedPhotoUri!!)
+        CoroutineScope(IO).launch {
+            ref.putFile(selectedPhotoUri!!)
                 .addOnSuccessListener {
                     Log.d("Main","Successfully upload image: ${it.metadata?.path}")
                     ref.downloadUrl.addOnSuccessListener {
@@ -123,7 +130,7 @@ class RegistrationActivity : AppCompatActivity() {
                 .addOnFailureListener{
 
                 }
-
+        }
     }
     private fun saveUserToFirebaseDataBase(profileImageUrl:String){
         val Username:EditText=findViewById(R.id.Username_registration_activity)
@@ -136,12 +143,13 @@ class RegistrationActivity : AppCompatActivity() {
         val username:String=Username.text.toString()
 
         val user = User(uid,email,username,profileImageUrl)
-
-        ref.setValue(user)
+        val intent =Intent(this, LatesMessagesActivity::class.java)
+        CoroutineScope(IO).launch {
+            ref.setValue(user)
                 .addOnSuccessListener {
                     Log.d("Main","Data saved to Firebase")
-                    val intent =Intent(this, LatesMessagesActivity::class.java)
                     startActivity(intent)
                 }
+        }
     }
 }

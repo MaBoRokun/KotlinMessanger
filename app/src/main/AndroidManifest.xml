@@ -13,19 +13,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.KotlinMessanger">
-        <activity android:name=".Messages.ChatLogActivity">
+        <activity android:name="com.example.kotlinmessanger.activitys.messages.ChatLogActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Messages.LatesMessagesActivity" />
+                android:value="com.example.kotlinmessanger.activitys.messages.LatesMessagesActivity" />
         </activity>
-        <activity android:name=".Messages.NewMessageActivity">
+        <activity android:name="com.example.kotlinmessanger.activitys.messages.NewMessageActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Messages.LatesMessagesActivity" />
+                android:value="com.example.kotlinmessanger.activitys.messages.LatesMessagesActivity" />
         </activity>
-        <activity android:name=".RegistrationActivity" />
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".Messages.LatesMessagesActivity">
+        <activity android:name=".activitys.RegistrationActivity" />
+        <activity android:name=".activitys.LoginActivity" />
+        <activity android:name="com.example.kotlinmessanger.activitys.messages.LatesMessagesActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

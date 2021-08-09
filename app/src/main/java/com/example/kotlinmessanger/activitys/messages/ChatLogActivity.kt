@@ -1,13 +1,12 @@
-package com.example.kotlinmessanger.Messages
+package com.example.kotlinmessanger.activitys.messages
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import androidx.recyclerview.widget.RecyclerView
-import com.example.kotlinmessanger.Entity.Messages
-import com.example.kotlinmessanger.Entity.User
-import com.example.kotlinmessanger.Items.ChatFromItem
-import com.example.kotlinmessanger.Items.ChatToItem
+import com.example.kotlinmessanger.entity.Messages
+import com.example.kotlinmessanger.entity.User
+import com.example.kotlinmessanger.items.ChatFromItem
+import com.example.kotlinmessanger.items.ChatToItem
 import com.example.kotlinmessanger.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -19,6 +18,9 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.xwray.groupie.GroupieAdapter
 import kotlinx.android.synthetic.main.activity_chat_log.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.launch
 
 class ChatLogActivity : AppCompatActivity() {
     private lateinit var database: FirebaseDatabase
@@ -74,35 +76,38 @@ class ChatLogActivity : AppCompatActivity() {
         val toId = toUser?.uid
         val ref = database.getReference("/user-messages/$fromId/$toId")
 
-        ref.addChildEventListener(object:ChildEventListener{
-            override fun onCancelled(error: DatabaseError) {
+        CoroutineScope(IO).launch {
+            ref.addChildEventListener(object:ChildEventListener{
+                override fun onCancelled(error: DatabaseError) {
 
-            }
-
-            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-                val chatMessages = snapshot.getValue(Messages::class.java)
-
-                if(chatMessages!=null){
-                    if(chatMessages.fromId==auth.uid){
-                        adapter.add(ChatFromItem(chatMessages.text))
-                    }else{
-                        adapter.add(ChatToItem(chatMessages.text))
-                    }
                 }
-                RecyclerView_ChatLog.scrollToPosition(adapter.itemCount-1)
-            }
 
-            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+                override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+                    val chatMessages = snapshot.getValue(Messages::class.java)
 
-            }
+                    if(chatMessages!=null){
+                        if(chatMessages.fromId==auth.uid){
+                            adapter.add(ChatFromItem(chatMessages.text))
+                        }else{
+                            adapter.add(ChatToItem(chatMessages.text))
+                        }
+                    }
+                    RecyclerView_ChatLog.scrollToPosition(adapter.itemCount-1)
+                }
 
-            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+                override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
 
-            }
+                }
 
-            override fun onChildRemoved(snapshot: DataSnapshot) {
+                override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
 
-            }
-        })
+                }
+
+                override fun onChildRemoved(snapshot: DataSnapshot) {
+
+                }
+            })
+        }
+
     }
 }

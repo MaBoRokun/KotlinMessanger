@@ -1,7 +1,7 @@
-package com.example.kotlinmessanger.Items
+package com.example.kotlinmessanger.items
 
 
-import com.example.kotlinmessanger.Entity.User
+import com.example.kotlinmessanger.entity.User
 import com.example.kotlinmessanger.R
 import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupieViewHolder

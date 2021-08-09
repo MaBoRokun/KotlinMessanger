@@ -1,4 +1,4 @@
-package com.example.kotlinmessanger.Messages
+package com.example.kotlinmessanger.activitys.messages
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -6,12 +6,11 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.recyclerview.widget.DividerItemDecoration
-import com.example.kotlinmessanger.Entity.Messages
-import com.example.kotlinmessanger.Entity.User
-import com.example.kotlinmessanger.Items.LatesMessageItemRow
-import com.example.kotlinmessanger.Items.UserItem
+import com.example.kotlinmessanger.entity.Messages
+import com.example.kotlinmessanger.entity.User
+import com.example.kotlinmessanger.items.LatesMessageItemRow
 import com.example.kotlinmessanger.R
-import com.example.kotlinmessanger.RegistrationActivity
+import com.example.kotlinmessanger.activitys.RegistrationActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
@@ -21,6 +20,9 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
 import com.xwray.groupie.GroupieAdapter
 import kotlinx.android.synthetic.main.activity_lates_messages.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.launch
 
 class LatesMessagesActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
@@ -67,46 +69,50 @@ class LatesMessagesActivity : AppCompatActivity() {
     private fun listenForLatesMessages(){
         val fromId=auth.uid
         val ref = database.getReference("/latest-messages/$fromId")
-        ref.addChildEventListener(object: ChildEventListener{
-            override fun onCancelled(error: DatabaseError) {
+        CoroutineScope(IO).launch {
+            ref.addChildEventListener(object: ChildEventListener{
+                override fun onCancelled(error: DatabaseError) {
 
-            }
+                }
 
-            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-                val ChatMessage = snapshot.getValue(Messages::class.java)?:return
+                override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+                    val ChatMessage = snapshot.getValue(Messages::class.java)?:return
                     LatestMessageMap[snapshot.key!!] = ChatMessage
-                refreshRecycler()
-            }
+                    refreshRecycler()
+                }
 
-            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-                val ChatMessage = snapshot.getValue(Messages::class.java)?:return
-                LatestMessageMap[snapshot.key!!] = ChatMessage
-                refreshRecycler()
-            }
+                override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+                    val ChatMessage = snapshot.getValue(Messages::class.java)?:return
+                    LatestMessageMap[snapshot.key!!] = ChatMessage
+                    refreshRecycler()
+                }
 
-            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+                override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
 
-            }
+                }
 
-            override fun onChildRemoved(snapshot: DataSnapshot) {
+                override fun onChildRemoved(snapshot: DataSnapshot) {
 
-            }
-        })
+                }
+            })
+        }
     }
 
 
     private fun fetchUser(){
         val uid = auth.uid
         val ref= database.getReference("/users/$uid")
-        ref.addListenerForSingleValueEvent(object: ValueEventListener{
-            override fun onCancelled(error: DatabaseError) {
+        CoroutineScope(IO).launch {
+            ref.addListenerForSingleValueEvent(object: ValueEventListener{
+                override fun onCancelled(error: DatabaseError) {
 
-            }
+                }
 
-            override fun onDataChange(snapshot: DataSnapshot) {
-                currentUser = snapshot.getValue(User::class.java)
-            }
-        })
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    currentUser = snapshot.getValue(User::class.java)
+                }
+            })
+        }
     }
    private fun verifyUserIsLogginIn(){
        val uid = auth.uid

@@ -1,4 +1,4 @@
-package com.example.kotlinmessanger
+package com.example.kotlinmessanger.activitys
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -6,9 +6,13 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import com.example.kotlinmessanger.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
@@ -27,8 +31,9 @@ class LoginActivity : AppCompatActivity() {
             val email = Email.text.toString()
             val password = Password.text.toString()
 
-            auth.signInWithEmailAndPassword(email,password)
-                    .addOnCompleteListener(this) { task ->
+            CoroutineScope(IO).launch {
+                auth.signInWithEmailAndPassword(email,password)
+                    .addOnCompleteListener(this@LoginActivity) { task ->
                         if (task.isSuccessful) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("Main", "signInWithEmail:success")
@@ -38,6 +43,8 @@ class LoginActivity : AppCompatActivity() {
                             Log.w("Main", "signInWithEmail:failure", task.exception)
                         }
                     }
+            }
+
         }
     }
 

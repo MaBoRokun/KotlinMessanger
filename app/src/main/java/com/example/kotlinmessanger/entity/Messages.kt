@@ -1,4 +1,4 @@
-package com.example.kotlinmessanger.Entity
+package com.example.kotlinmessanger.entity
 
 
 class Messages(val id:String,val text:String,val fromId:String,val toId:String,val timestamp: Long) {
